@@ -337,16 +337,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     // -------------------------
 
-    // Default is English
-    let currentLang = 'en';
+    // Default is English, or check LocalStorage
+    let currentLang = localStorage.getItem('lang') || 'en';
 
     // Initialize
-    updateLanguage('en');
+    updateLanguage(currentLang);
     initHeroSlider();
 
     // 1. Language Switcher
     langBtn.addEventListener('click', () => {
         currentLang = currentLang === 'en' ? 'ar' : 'en';
+        localStorage.setItem('lang', currentLang);
         updateLanguage(currentLang);
     });
 

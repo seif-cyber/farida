@@ -1372,3 +1372,119 @@ html[dir="rtl"] .section-title-center::after {
     gap: 30px;
     /* Space between logos */
 }
+
+/* --- Video Hero Section --- */
+.video-hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    /* Better for mobile */
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000;
+}
+
+.hero-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+}
+
+/* Ensure overlay sits on top of video */
+.video-hero .hero-overlay {
+    z-index: 1;
+}
+
+.hero-content-services {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 20px;
+}
+
+.service-hero-title {
+    font-size: 4rem;
+    font-weight: 800;
+    color: #fff;
+    text-transform: uppercase;
+    line-height: 1.1;
+}
+
+.highlight-red {
+    color: var(--primary-color);
+}
+
+@media (max-width: 768px) {
+    .service-hero-title {
+        font-size: 2.5rem;
+    }
+}
+
+/* --- Footer Bottom & Developer Credit --- */
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding-top: 20px;
+    border-top: 1px solid #222;
+}
+
+.developer-credit {
+    text-decoration: none;
+    color: #888;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding: 5px 10px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.developer-credit:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.developer-credit .heart-beat {
+    display: inline-block;
+    animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+.developer-credit .dev-name {
+    font-weight: 800;
+    background: linear-gradient(45deg, #fff, var(--primary-color));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-transform: uppercase;
+}
+
+@keyframes heartbeat {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.3);
+    }
+}
+
+@media (max-width: 600px) {
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+    }
+}
