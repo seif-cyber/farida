@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://farida-eg.com/sitemap.xml
+Sitemap: https://seifhossam.com/sitemap.xml
