@@ -17,6 +17,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="pics/favicon_io/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="pics/favicon_io/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="pics/favicon_io/favicon-16x16.png">
+    <link rel="shortcut icon" href="pics/favicon_io/favicon.ico">
     <link rel="manifest" href="pics/favicon_io/site.webmanifest">
 
     <!-- Meta Description & Keywords -->
@@ -72,7 +73,7 @@
                 <li><a href="index.html#values" data-i18n="nav_values">القيم</a></li>
                 <li><a href="index.html#about" data-i18n="nav_about">من نحن</a></li>
                 <!-- <li><a href="index.html#clients" data-i18n="nav_clients">عملاؤنا</a></li> Removed as requested -->
-                <li><a href="services.html" class="active" data-i18n="nav_services">ماذا نفعل</a></li>
+                <li><a href="services.html" class="active" data-i18n="nav_services">خدماتنا</a></li>
                 <li><a href="index.html#partners" data-i18n="nav_partners">شركاء نجاحنا</a></li>
                 <li><a href="index.html#our-work" data-i18n="nav_work">سابقة أعمالنا</a></li>
                 <li><a href="#contact" data-i18n="nav_contact">تواصل معنا</a></li>
@@ -475,8 +476,94 @@
         </div>
     </footer>
 
+    <!-- Floating Action Buttons -->
+    <div class="floating-buttons">
+        <!-- Scroll to Top Button -->
+        <button id="scrollToTop" class="fab-btn scroll-top" aria-label="Scroll to top">
+            <i class="fas fa-arrow-up"></i>
+        </button>
+
+        <!-- WhatsApp Button -->
+        <a href="https://wa.me/201099068206" target="_blank" class="fab-btn whatsapp-btn" aria-label="Chat on WhatsApp">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+    </div>
+
+
+
     <!-- JavaScript -->
     <script src="script.js"></script>
+
+    <!-- Services Page Preloader Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const splash = document.getElementById('splash-screen');
+            const video = document.querySelector('.hero-video');
+
+            if (splash && video) {
+                // Ensure splash is visible initially
+                splash.style.display = 'flex';
+                splash.style.opacity = '1';
+
+                const hideSplash = () => {
+                    // Use GSAP for smooth fade out matching the rest of the site
+                    if (typeof gsap !== 'undefined') {
+                        gsap.to(splash, {
+                            opacity: 0,
+                            duration: 0.8,
+                            onComplete: () => {
+                                splash.style.display = 'none';
+                            }
+                        });
+                    } else {
+                        // Fallback if GSAP fails
+                        splash.style.transition = 'opacity 0.8s ease';
+                        splash.style.opacity = '0';
+                        setTimeout(() => splash.style.display = 'none', 800);
+                    }
+                };
+
+                // Safety Timeout (5 seconds max wait)
+                const safetyTimeout = setTimeout(() => {
+                    console.warn('Video load timeout - forcing page reveal');
+                    hideSplash();
+                }, 5000);
+
+                // Video Ready Handler
+                const onVideoReady = () => {
+                    clearTimeout(safetyTimeout);
+                    setTimeout(hideSplash, 500); // Small buffer
+
+                    // Attempt Playback immediately
+                    const playPromise = video.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(error => {
+                            console.log('Autoplay prevented. Waiting for user interaction.');
+                            // Video is ready but blocked. Splash is hiding (so user sees poster).
+                            // Add one-time listener to start video on first touch/click.
+                            const startVideo = () => {
+                                video.play();
+                                document.removeEventListener('touchstart', startVideo);
+                                document.removeEventListener('click', startVideo);
+                            };
+                            document.addEventListener('touchstart', startVideo, { once: true });
+                            document.addEventListener('click', startVideo, { once: true });
+                        });
+                    }
+                };
+
+                // Check if already ready
+                if (video.readyState >= 3) {
+                    onVideoReady();
+                } else {
+                    video.addEventListener('canplaythrough', onVideoReady, { once: true });
+                    // Fallback events
+                    video.addEventListener('load', onVideoReady, { once: true });
+                    video.addEventListener('playing', onVideoReady, { once: true });
+                }
+            }
+        });
+    </script>
 </body>
 
 </html>

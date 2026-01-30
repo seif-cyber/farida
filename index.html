@@ -17,6 +17,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="pics/favicon_io/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="pics/favicon_io/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="pics/favicon_io/favicon-16x16.png">
+    <link rel="shortcut icon" href="pics/favicon_io/favicon.ico">
     <link rel="manifest" href="pics/favicon_io/site.webmanifest">
 
     <!-- Meta Description & Keywords -->
@@ -73,7 +74,7 @@
     </script>
 
     <!-- Icons (using Font Awesome for social icons) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/all.min.css">
 </head>
 
 <body data-lang="en">
@@ -110,7 +111,7 @@
                 <li><a href="#values" data-i18n="nav_values">القيم</a></li>
                 <li><a href="#about" data-i18n="nav_about">من نحن</a></li>
                 <!-- <li><a href="#clients" data-i18n="nav_clients">عملاؤنا</a></li> Removed as requested -->
-                <li><a href="services.html" data-i18n="nav_services">ماذا نفعل</a></li>
+                <li><a href="services.html" data-i18n="nav_services">خدماتنا</a></li>
                 <li><a href="#partners" data-i18n="nav_partners">شركاء نجاحنا</a></li>
                 <li><a href="#our-work" data-i18n="nav_work">سابقة أعمالنا</a></li>
                 <li><a href="#contact" data-i18n="nav_contact">تواصل معنا</a></li>
@@ -129,7 +130,8 @@
             <div class="slide active slide-banner-1">
                 <div class="hero-overlay"></div>
                 <div class="container hero-content">
-                    <h1 data-i18n="hero_title">DRIVEN BY STRATEGY, POWERED BY <span class="highlight">CREATIVITY</span>
+                    <h1 data-i18n="hero_title">DRIVEN BY STRATEGY, <br>POWERED BY <span
+                            class="highlight">CREATIVITY</span>
                     </h1>
                 </div>
             </div>
@@ -212,10 +214,10 @@
         </div>
     </section>
 
-    <!-- Services Section (ماذا نفعل) -->
+    <!-- Services Section (خدماتنا) -->
     <section id="services" class="section services">
         <div class="container">
-            <h2 class="section-title fade-in-up" data-i18n="services_title">ماذا نفعل</h2>
+            <h2 class="section-title fade-in-up" data-i18n="services_title">خدماتنا</h2>
             <div class="services-grid">
                 <a href="services.html#design-branding" class="service-card-link">
                     <div class="service-card fade-in-up">
@@ -294,7 +296,7 @@
                 <div class="marquee-group">
                     <!-- All 33 partner logos -->
                     <div class="partner-logo"><img src="pics/logos/partner_1.png"
-                            alt="Farida Agency Partner Client - عميل شركة فريدة" loading="lazy"></div>
+                            alt="Farida Agency Partner Client - عميل شركة فريدة"></div>
                     <div class="partner-logo"><img src="pics/logos/partner_2.png" alt="Partner"></div>
                     <div class="partner-logo"><img src="pics/logos/partner_3.png" alt="Partner"></div>
                     <div class="partner-logo"><img src="pics/logos/partner_4.png" alt="Partner"></div>
@@ -331,7 +333,7 @@
                 <div class="marquee-group">
                     <!-- Duplicate group for seamless loop -->
                     <div class="partner-logo"><img src="pics/logos/partner_1.png"
-                            alt="Farida Agency Partner Client - عميل شركة فريدة" loading="lazy"></div>
+                            alt="Farida Agency Partner Client - عميل شركة فريدة"></div>
                     <div class="partner-logo"><img src="pics/logos/partner_2.png" alt="Partner"></div>
                     <div class="partner-logo"><img src="pics/logos/partner_3.png" alt="Partner"></div>
                     <div class="partner-logo"><img src="pics/logos/partner_4.png" alt="Partner"></div>
@@ -429,8 +431,21 @@
     </footer>
 
     <!-- GSAP & ScrollTrigger -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="assets/js/gsap.min.js"></script>
+    <script src="assets/js/ScrollTrigger.min.js"></script>
+
+    <!-- Floating Action Buttons -->
+    <div class="floating-buttons">
+        <!-- Scroll to Top Button -->
+        <button id="scrollToTop" class="fab-btn scroll-top" aria-label="Scroll to top">
+            <i class="fas fa-arrow-up"></i>
+        </button>
+
+        <!-- WhatsApp Button -->
+        <a href="https://wa.me/201099068206" target="_blank" class="fab-btn whatsapp-btn" aria-label="Chat on WhatsApp">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+    </div>
 
     <!-- JavaScript -->
     <script src="script.js"></script>

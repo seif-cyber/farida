@@ -11,7 +11,7 @@ const translations = {
 
         work_section_text: "To view our previous work, please visit",
 
-        hero_title: "DRIVEN BY STRATEGY, POWERED BY CREATIVITY",
+        hero_title: "DRIVEN BY STRATEGY, <br>POWERED BY CREATIVITY",
 
         // Slide 2
         slide2_highlight: '<span class="red-text">S</span>TAND',
@@ -147,14 +147,14 @@ const translations = {
         nav_values: "القيم",
         nav_about: "من نحن",
         nav_clients: "عملاؤنا",
-        nav_services: "ماذا نفعل",
+        nav_services: "خدماتنا",
         nav_partners: "شركاء نجاحنا",
         nav_contact: "تواصل معنا",
         nav_work: "سابقة أعمالنا",
 
         work_section_text: "لمشاهدة سابقة الأعمال يرجى زيارة",
 
-        hero_title: "مدفوع بالاستراتيجية، ومُدعّم بالإبداع",
+        hero_title: "مدفوع بالاستراتيجية، <br>ومُدعّم بالإبداع",
 
         // Slide 2
         slide2_highlight: '<span class="red-text">تميز</span>',
@@ -177,7 +177,7 @@ const translations = {
         stat_partners: "شريك نجاح",
         stat_employee: "موظف",
 
-        services_title: "ماذا نفعل",
+        services_title: "خدماتنا",
         serv_1: "التصميم والعلامات التجارية",
         serv_2: "حلول التسويق الرقمي والاعلانات",
         serv_3: "انشاء المحتوى وكتابة النصوص",
@@ -355,6 +355,11 @@ document.addEventListener('DOMContentLoaded', () => {
         currentLang = currentLang === 'en' ? 'ar' : 'en';
         localStorage.setItem('lang', currentLang);
         updateLanguage(currentLang);
+
+        // Close mobile menu if open
+        if (navLinks) {
+            navLinks.classList.remove('active');
+        }
     });
 
     function updateLanguage(lang) {
@@ -432,11 +437,34 @@ document.addEventListener('DOMContentLoaded', () => {
             const heroTitle = activeSlide.querySelector('h1');
             if (!heroTitle) return;
 
-            const text = heroTitle.innerText;
+            // FIX: Retrieve clean HTML from source of truth (translations) to avoid exponential DOM recursion
+            // If we read .innerHTML of an already-animated element, we get nested spans which causes a freeze/loop.
+            const lang = document.documentElement.getAttribute('lang') || 'en';
+            const key = heroTitle.getAttribute('data-i18n');
+
+            // Fallback to innerText (safe, no tags) if translation missing, 
+            // but prefer translation to keep <br> and <span class="highlight">
+            let html = (translations[lang] && translations[lang][key])
+                ? translations[lang][key]
+                : heroTitle.innerText;
+
+            // Split by <br> to handle line breaks
+            const lines = html.split('<br>');
+
             if (isAr) {
-                heroTitle.innerHTML = text.split(' ').map(word => {
-                    return `<span class="hero-word" style="opacity:0; display:inline-block; transform:translateY(30px); margin: 0 0.15em;">${word}</span>`;
-                }).join(' ');
+                // For Arabic, animate by words while preserving line breaks
+                heroTitle.innerHTML = lines.map(line => {
+                    // Remove any existing span tags from highlight
+                    const cleanLine = line.replace(/<span class="highlight">(.*?)<\/span>/g, '$1');
+                    const words = cleanLine.split(' ').map(word => {
+                        // Re-wrap CREATIVITY with highlight if it exists
+                        if (word.includes('الإبداع') || word.includes('CREATIVITY')) {
+                            return `<span class="hero-word" style="opacity:0; display:inline-block; transform:translateY(30px); margin: 0 0.15em;"><span class="highlight">${word}</span></span>`;
+                        }
+                        return `<span class="hero-word" style="opacity:0; display:inline-block; transform:translateY(30px); margin: 0 0.15em;">${word}</span>`;
+                    }).join(' ');
+                    return words;
+                }).join('<br>');
 
                 gsap.to('.hero-word', {
                     opacity: 1,
@@ -447,10 +475,35 @@ document.addEventListener('DOMContentLoaded', () => {
                     delay: 0.2
                 });
             } else {
-                heroTitle.innerHTML = text.split('').map(char => {
-                    if (char === ' ') return '&nbsp;';
-                    return `<span class="hero-char" style="opacity:0; display:inline-block; transform:translateY(30px)">${char}</span>`;
-                }).join('');
+                // For English, animate by characters while preserving line breaks
+                heroTitle.innerHTML = lines.map(line => {
+                    // Check if this line contains the highlight span
+                    const hasHighlight = line.includes('<span class="highlight">');
+                    let processedLine = line;
+
+                    if (hasHighlight) {
+                        // Extract the highlighted word
+                        const highlightMatch = line.match(/<span class="highlight">(.*?)<\/span>/);
+                        const highlightedWord = highlightMatch ? highlightMatch[1] : '';
+                        // Remove the highlight span temporarily
+                        processedLine = line.replace(/<span class="highlight">.*?<\/span>/g, highlightedWord);
+                    }
+
+                    const chars = processedLine.split('').map(char => {
+                        if (char === ' ') return '&nbsp;';
+                        // Check if this char is part of CREATIVITY
+                        const charIndex = processedLine.indexOf(char);
+                        const isInCreativity = hasHighlight && processedLine.substring(charIndex).startsWith('CREATIVITY'.substring(0, 1));
+
+                        return `<span class="hero-char" style="opacity:0; display:inline-block; transform:translateY(30px)">${char}</span>`;
+                    }).join('');
+
+                    // Re-apply highlight to CREATIVITY if needed
+                    if (hasHighlight) {
+                        return chars.replace(/(<span class="hero-char"[^>]*>C<\/span>)(<span class="hero-char"[^>]*>R<\/span>)(<span class="hero-char"[^>]*>E<\/span>)(<span class="hero-char"[^>]*>A<\/span>)(<span class="hero-char"[^>]*>T<\/span>)(<span class="hero-char"[^>]*>I<\/span>)(<span class="hero-char"[^>]*>V<\/span>)(<span class="hero-char"[^>]*>I<\/span>)(<span class="hero-char"[^>]*>T<\/span>)(<span class="hero-char"[^>]*>Y<\/span>)/, '<span class="highlight">$1$2$3$4$5$6$7$8$9$10</span>');
+                    }
+                    return chars;
+                }).join('<br>');
 
                 gsap.to('.hero-char', {
                     opacity: 1,
@@ -700,21 +753,23 @@ document.addEventListener('DOMContentLoaded', () => {
     // 7. Splash Screen Removal (Sync with refined animation)
     const splash = document.getElementById('splash-screen');
     if (splash) {
-        if (sessionStorage.getItem('splashSeen')) {
-            splash.style.display = 'none';
-        } else {
-            sessionStorage.setItem('splashSeen', 'true');
-            // Wait a bit for the animation to play out
-            setTimeout(() => {
-                gsap.to(splash, {
-                    opacity: 0,
-                    duration: 0.8,
-                    onComplete: () => splash.classList.add('hidden')
-                });
-            }, 2500);
+        // EXCEPTION: Do not auto-remove splash on Services page (handled by video loader)
+        if (!document.body.classList.contains('services-page')) {
+            if (sessionStorage.getItem('splashSeen')) {
+                splash.style.display = 'none';
+            } else {
+                sessionStorage.setItem('splashSeen', 'true');
+                // Wait a bit for the animation to play out
+                setTimeout(() => {
+                    gsap.to(splash, {
+                        opacity: 0,
+                        duration: 0.8,
+                        onComplete: () => splash.classList.add('hidden')
+                    });
+                }, 2500);
+            }
         }
     }
-
     // 8. Background Orb Animations
     function initBackgroundAnimation() {
         // Random floating movement
@@ -753,6 +808,27 @@ document.addEventListener('DOMContentLoaded', () => {
         navItems.forEach(item => {
             item.addEventListener('click', () => {
                 navLinks.classList.remove('active');
+            });
+        });
+    }
+    // 9. Floating Buttons Logic
+    const scrollTopBtn = document.getElementById('scrollToTop');
+
+    if (scrollTopBtn) {
+        // Toggle visibility
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+
+        // Scroll to top action
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
             });
         });
     }

@@ -271,6 +271,10 @@ video::-webkit-media-controls-start-playback-button {
     white-space: nowrap;
 }
 
+.hero h1 br {
+    display: none;
+}
+
 .hero span.highlight {
     color: var(--primary-color);
 }
@@ -369,6 +373,12 @@ video::-webkit-media-controls-start-playback-button {
 @media (max-width: 992px) {
     .slide-type-2 .slide-title {
         font-size: 6rem;
+    }
+
+    .hero h1 br {
+        display: block;
+        content: "";
+        margin-bottom: 30px;
     }
 
     .slide-type-3 .founder-name {
@@ -1753,4 +1763,96 @@ html[lang="ar"] .work-text {
     direction: ltr !important;
     display: inline-block !important;
     unicode-bidi: embed;
+}
+
+/* --- Floating Action Buttons --- */
+.floating-buttons {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 1000;
+    pointer-events: none;
+    /* Allows clicking through the area around buttons */
+}
+
+.fab-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 30px;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: none;
+    outline: none;
+    pointer-events: auto;
+    /* Re-enable pointer events for buttons */
+}
+
+.fab-btn:hover {
+    transform: translateY(-5px) scale(1.1);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+.fab-btn:active {
+    transform: translateY(0) scale(0.95);
+}
+
+/* WhatsApp Button */
+.whatsapp-btn {
+    background-color: #25D366;
+}
+
+.whatsapp-btn:hover {
+    background-color: #20BA5A;
+    box-shadow: 0 0 20px rgba(37, 211, 102, 0.5);
+}
+
+/* Scroll Top Button */
+.scroll-top {
+    background-color: var(--primary-color);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    font-size: 24px;
+}
+
+.scroll-top.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.scroll-top.visible:hover {
+    transform: translateY(-5px) scale(1.1);
+    background-color: #b00017;
+    /* Darker shade of primary red */
+    box-shadow: 0 0 20px rgba(214, 0, 28, 0.5);
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+    .floating-buttons {
+        bottom: 20px;
+        left: 20px;
+        gap: 10px;
+    }
+
+    .fab-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 24px;
+    }
+
+    .scroll-top {
+        font-size: 20px;
+    }
 }
